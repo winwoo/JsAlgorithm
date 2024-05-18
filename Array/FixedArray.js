@@ -1,4 +1,4 @@
-class FixedArray {
+export class FixedArray {
     #arrayLength;
     #array;
     #index;
@@ -51,11 +51,11 @@ class FixedArray {
     }
 
      // 현재 배열의 상태를 string으로 반환
-    toString() {
+    stringify() {
         const length = this.getLength();
         let toString = "[";
         for(let i = 0; i < length; i++) {
-            toString += this.#array[i];
+            toString += JSON.stringify(this.#array[i]);
             if(i != length -1) {
                 toString += ","
             }
@@ -173,13 +173,13 @@ arr.push(4);
 arr.push(5);
 
 console.log("getLegnth : ", arr.getLength());
-console.log("toString : ", arr.toString());
+console.log("toString : ", arr.stringify());
 
 console.log("pop1 : ", arr.pop());
 console.log("pop2 : ", arr.pop());
 
 console.log("getLegnth : ", arr.getLength());
-console.log("toString : ", arr.toString());
+console.log("toString : ", arr.stringify());
 
 console.log("indexOf : ", arr.indexOf(2));
 console.log("find : ", arr.find(f => f === 3)); // 3
@@ -189,6 +189,6 @@ console.log("includes : ", arr.includes(2));
 arr.forEach(item => {
     console.log("foreach : ", item);
 })
-console.log("filter : ", arr.filter(f => f > 2).toString()); //[3,4,5]
-console.log("map : ", arr.map(m => m * 10).toString()); // [10,20,30,40,50]
+console.log("filter : ", arr.filter(f => f > 2).stringify()); //[3,4,5]
+console.log("map : ", arr.map(m => m * 10).stringify()); // [10,20,30,40,50]
 console.log("reduce : ", arr.reduce((acc, cur) => acc + cur, 0)); // 15
