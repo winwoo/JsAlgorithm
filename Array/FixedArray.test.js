@@ -1,17 +1,19 @@
 import {expect} from 'chai';
 import { FixedArray } from './FixedArray.js';
 
-
+3
 describe("FixedArray", () => {
     let numberArray;
     let objectArray;
-    let testNumberArray = [];
-    let testObjectArray = [];
+    let testNumberArray;
+    let testObjectArray;
     const TEST_LENGTH = 5;
 
-    before(() => {
+    beforeEach(() => {
         numberArray = new FixedArray(TEST_LENGTH);
         objectArray = new FixedArray(TEST_LENGTH);
+        testNumberArray = [];
+        testObjectArray = [];
 
         for(let i = 1; i <= TEST_LENGTH; i++) {
             numberArray.push(i);
@@ -65,5 +67,34 @@ describe("FixedArray", () => {
     it('includes', () => {
         expect(numberArray.includes(f => f === 3)).to.equal(testNumberArray.includes(f => f === 3));
         expect(objectArray.includes(f => f.id === 3)).to.equal(testObjectArray.includes(f => f.id === 3));
+    })
+
+    it('forEach', () => {
+        let temp = [];
+        let testTemp = [];
+        numberArray.forEach(item => temp.push(item));
+        testNumberArray.forEach(item => testTemp.push(item));
+        expect(JSON.stringify(temp)).to.equal(JSON.stringify(testTemp));
+
+        temp = [];
+        testTemp = [];
+        objectArray.forEach(item => temp.push(item));
+        testObjectArray.forEach(item => testTemp.push(item));
+        expect(JSON.stringify(temp)).to.equal(JSON.stringify(testTemp));
+    })
+
+    it('filter', () => {
+        expect(numberArray.filter(f => f !== 3).stringify()).to.equal(JSON.stringify(testNumberArray.filter(f => f !== 3)));
+        expect(objectArray.filter(f => f.id !== 3).stringify()).to.equal(JSON.stringify(testObjectArray.filter(f => f.id !== 3)));
+    })
+
+    it('map', () => {
+        expect(numberArray.map(f => f * 10).stringify()).to.equal(JSON.stringify(testNumberArray.map(f => f * 10)));
+        expect(objectArray.map(f => f.id).stringify()).to.equal(JSON.stringify(testObjectArray.map(f => f.id)));
+    })
+
+    it('reduce', () => {
+        expect(numberArray.reduce((acc, cur) => acc + cur, 0)).to.equal(testNumberArray.reduce((acc, cur) => acc + cur, 0));
+        expect(objectArray.reduce((acc, cur) => acc + cur.id, 0)).to.equal(testObjectArray.reduce((acc, cur) => acc + cur.id, 0));
     })
 });

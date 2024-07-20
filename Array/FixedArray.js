@@ -4,7 +4,7 @@ export class FixedArray {
     #index;
 
     // #arrayLength와 #array를 알맞게 초기화
-    // 생성자 파라미터에는 CustomArray의 고정된 길이를 받아야됨.
+    // 생성자 파라미터에는 FixedArray의 고정된 길이를 받아야됨.
     // #array초기화 시 각요소의 값은 undefined
     constructor(arrayLength) {
         this.#arrayLength = arrayLength;
@@ -22,7 +22,8 @@ export class FixedArray {
     // 배열 맨뒤에 요소 추가
     // 배열의 길이가 #arrayLength를 초과할 경우 요소를 추가되면 안됨.
     push(element) { 
-        if(this.#index === this.#arrayLength) {
+        const length = this.getLength();
+        if(length === this.#arrayLength) {
             console.error("push array over flow");
             return;
         }
@@ -40,7 +41,8 @@ export class FixedArray {
             return;
         }
 
-        const lastElement = this.#array[this.#index - 1];
+        const lastElement = this.#array[length - 1];
+        this.#array[length - 1] = undefined;
         this.#index--;
         return lastElement;
     }
@@ -71,9 +73,6 @@ export class FixedArray {
     // 배열에서 특정 요소의 첫 번째 인덱스를 반환합니다. 요소가 없으면 -1을 반환합니다.
     indexOf(searchElement) { 
         const length = this.getLength();
-        if(length === 0)
-            return -1;
-
         for(let i = 0; i < length; i++) {
             if(this.#array[i] === searchElement) {
                 return i;
@@ -84,11 +83,8 @@ export class FixedArray {
 
     // 배열의 각 요소에 대해 predicate 결과가 true인 요소중 제일 첫번째 요소의 index반환
     // true 가 없으면 -1 반환
-    findIndex(predicate) { 
+    findIndex(predicate) {
         const length = this.getLength();
-        if(length === 0)
-            return -1;
-
         for(let i = 0; i < length; i++) {
             if(predicate(this.#array[i]) == true) {
                 return i;
@@ -152,7 +148,7 @@ export class FixedArray {
             return initValue;
 
         let startIndex = 0;
-        if(!initValue) {
+        if(initValue != 0 && !initValue) {
             initValue = this.#array[0];
             startIndex++;
         }
@@ -163,6 +159,61 @@ export class FixedArray {
         }
         return acc;
     }
+
+    join(separator) {
+        const length = this.getLength();
+        if(length === 0)
+            return "";
+
+        let str = "";
+        for(let i = 0; i < length - 1; i++) {
+            str += `${this.#array[i]}${separator}`
+        }
+        str += this.#array[length -  1];
+        return str;
+    }
+
+    reverse() {
+        const length = this.getLength();
+        if(length === 0)
+            return this;
+
+        let start = 0;
+        let end = length - 1;
+        let tmp;
+
+        while(start < end) {
+            tmp = this.#array[start];
+            this.#array[start] = this.#array[end];
+            this.#array[end] = tmp;
+            start++;
+            end--;
+        }
+    }
+
+    slice(start, end) {
+        if(start > end) {
+            console.error('start cannot be greater than end.')
+            return;
+        }
+
+        const length = this.getLength();
+        if(start < 0 || start >= length) {
+            console.error('start is out of index')
+            return;
+        }
+
+        if(end >= length) {
+            end = length;
+        }
+
+        let newLength = end - start;
+        let newArray = new FixedArray(newLength);
+        for(let i = start; i < end; i++) {
+            newArray.push(this.#array[i]);
+        }
+        return newArray;
+    }
 }
 
 const arr = new FixedArray(5);
@@ -172,14 +223,14 @@ arr.push(3);
 arr.push(4);
 arr.push(5);
 
-console.log("getLegnth : ", arr.getLength());
-console.log("toString : ", arr.stringify());
+console.log("getLegnth : ", arr.getLength()); // getLegnth :  5
+console.log("stringify : ", arr.stringify()); // stringify :  [1,2,3,4,5]
 
-console.log("pop1 : ", arr.pop());
-console.log("pop2 : ", arr.pop());
+console.log("pop1 : ", arr.pop()); // pop1 :  5
+console.log("pop2 : ", arr.pop()); // pop2 :  4
 
-console.log("getLegnth : ", arr.getLength());
-console.log("toString : ", arr.stringify());
+console.log("getLegnth : ", arr.getLength()); // getLegnth :  3
+console.log("stringify : ", arr.stringify()); // stringify :  [1,2,3]
 
 console.log("indexOf : ", arr.indexOf(2));
 console.log("find : ", arr.find(f => f === 3)); // 3
@@ -192,3 +243,5 @@ arr.forEach(item => {
 console.log("filter : ", arr.filter(f => f > 2).stringify()); //[3,4,5]
 console.log("map : ", arr.map(m => m * 10).stringify()); // [10,20,30,40,50]
 console.log("reduce : ", arr.reduce((acc, cur) => acc + cur, 0)); // 15
+
+

@@ -22,5 +22,7 @@ class FixedArray {
     getLength() { }
 
     // 현재 배열의 상태를 string으로 반환
-    toString() { }
+    stringify() { }
 }
+
+

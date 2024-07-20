@@ -28,7 +28,7 @@ class FixedArray {
     //////      LEVEL 2      /////
     //////////////////////////////
     // 배열에서 특정 요소의 첫 번째 인덱스를 반환합니다. 요소가 없으면 -1을 반환합니다.
-    indexOf() { }
+    indexOf(searchElement) { }
 
     // 배열의 각 요소에 대해 predicate 결과가 true인 요소중 제일 첫번째 요소 1개만 반환
     // true 가 없으면 null 반환
@@ -39,7 +39,7 @@ class FixedArray {
     findIndex(predicate) { }
 
     // 배열에 특정 요소가 포함되어 있는지 여부를 확인합니다. (true or false)
-    includes() { }
+    includes(searchElement) { }
 
     //////////////////////////////
     //////      LEVEL 3      /////
